@@ -1,0 +1,67 @@
+# automations.yaml
+# Add these automations for PWSD water usage tracking
+
+# =============================================================================
+# POLLING FREQUENCY: Every 3 hours
+# =============================================================================
+# This automation runs every 3 hours to fetch updated water usage data.
+# 
+# To change the polling frequency, modify the "hours:" value below:
+#   hours: "/1"  = Every 1 hour (⚠️ Not recommended - too frequent!)
+#   hours: "/2"  = Every 2 hours
+#   hours: "/3"  = Every 3 hours (DEFAULT - Good balance)
+#   hours: "/4"  = Every 4 hours (Matches meter reading frequency)
+#   hours: "/6"  = Every 6 hours (Conservative)
+#   hours: "/12" = Every 12 hours (Very conservative)
+#
+# ⚠️ RATE LIMITING WARNING:
+# - PWSD may rate limit excessive API requests
+# - Recommend: 3+ hours between polls
+# - Absolute minimum: 1 hour (not recommended)
+# - PWSD meters are read every 3-4 hours, so polling at this frequency
+#   captures updates without excessive API calls
+# =============================================================================
+
+- id: update_pwsd_water_every_3_hours
+  alias: "Update PWSD Water Usage - Every 3 Hours"
+  description: "Fetch monthly total, yesterday's usage, and today's usage every 3 hours"
+  trigger:
+    - platform: time_pattern
+      hours: "/3"  # ← Change this to adjust polling frequency
+  action:
+    - service: shell_command.update_pwsd_water
+    - delay: "00:00:20"
+    - service: homeassistant.update_entity
+      target:
+        entity_id: 
+          - sensor.pwsd_monthly_water_usage
+          - sensor.pwsd_yesterday_water_usage
+          - sensor.pwsd_today_water_usage
+
+# Run on Home Assistant startup
+- id: update_pwsd_water_startup
+  alias: "Update PWSD Water Usage - Startup"
+  description: "Fetch water usage when Home Assistant starts"
+  trigger:
+    - platform: homeassistant
+      event: start
+  action:
+    - delay: "00:01:00"
+    - service: shell_command.update_pwsd_water
+
+# Optional: Manual update button
+- id: manual_pwsd_water_update
+  alias: "Manual PWSD Water Update Button"
+  description: "Update water usage when button is pressed"
+  trigger:
+    - platform: state
+      entity_id: input_button.update_pwsd_water_now
+  action:
+    - service: shell_command.update_pwsd_water
+    - delay: "00:00:20"
+    - service: homeassistant.update_entity
+      target:
+        entity_id:
+          - sensor.pwsd_monthly_water_usage
+          - sensor.pwsd_yesterday_water_usage
+          - sensor.pwsd_today_water_usage

@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+*.egg-info/
+
+# Home Assistant
+secrets.yaml
+*.db
+*.db-shm
+*.db-wal
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS
+Thumbs.db
+desktop.ini
+
+# Test data
+pwsd_monthly_water_usage.json
+pwsd_yesterday_water_usage.json
+pwsd_today_water_usage.json
+debug_pwsd_*.json
+
+# Temp files
+*.tmp
+*.bak
+
+# Personal info
+*_personal.yaml

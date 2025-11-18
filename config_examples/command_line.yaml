@@ -1,0 +1,66 @@
+# command_line.yaml
+# Add these three sensors for complete water usage tracking
+
+# Monthly water usage (for Energy Dashboard)
+- sensor:
+    command: "cat /config/pwsd_monthly_water_usage.json"
+    name: "PWSD Monthly Water Usage"
+    scan_interval: 300
+    unique_id: pwsd_monthly_water_usage
+    value_template: "{{ value_json.value }}"
+    unit_of_measurement: "gal"
+    device_class: water
+    state_class: total
+    icon: mdi:water
+    json_attributes:
+      - unit
+      - month
+      - year
+      - period
+      - meter_reading
+      - date
+      - timestamp
+      - source_type
+      - source_url
+
+# Yesterday's actual water usage (from interval API)
+- sensor:
+    command: "cat /config/pwsd_yesterday_water_usage.json"
+    name: "PWSD Yesterday Water Usage"
+    scan_interval: 3600
+    unique_id: pwsd_yesterday_water_usage
+    value_template: "{{ value_json.value }}"
+    unit_of_measurement: "gal"
+    device_class: water
+    state_class: total_increasing
+    icon: mdi:water-minus
+    json_attributes:
+      - unit
+      - date
+      - full_date
+      - meter_number
+      - measurement_type
+      - source_type
+      - source_url
+      - timestamp
+
+# Today's water usage so far (from interval API)
+- sensor:
+    command: "cat /config/pwsd_today_water_usage.json"
+    name: "PWSD Today Water Usage"
+    scan_interval: 1800  # Check every 30 minutes
+    unique_id: pwsd_today_water_usage
+    value_template: "{{ value_json.value }}"
+    unit_of_measurement: "gal"
+    device_class: water
+    state_class: total_increasing
+    icon: mdi:water
+    json_attributes:
+      - unit
+      - date
+      - full_date
+      - meter_number
+      - measurement_type
+      - source_type
+      - source_url
+      - timestamp

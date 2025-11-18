@@ -1,0 +1,17 @@
+# template.yaml (optional)
+# Calculate average daily water usage from monthly total
+
+- sensor:
+    - name: "Average Daily Water Usage"
+      unique_id: pwsd_avg_daily_usage
+      state: >
+        {% set total = states('sensor.pwsd_monthly_water_usage') | float(0) %}
+        {% set days = now().day %}
+        {{ (total / days) | round(0) if days > 0 else 0 }}
+      unit_of_measurement: "gal"
+      device_class: water
+      icon: mdi:water-percent
+      attributes:
+        calculation: "Month total divided by days elapsed"
+        days_elapsed: "{{ now().day }}"
+        month_total: "{{ states('sensor.pwsd_monthly_water_usage') }}"
