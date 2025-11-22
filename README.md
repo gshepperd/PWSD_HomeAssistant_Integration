@@ -6,6 +6,8 @@
 
 Automatically track your **Parker Water & Sanitation District (PWSD)** water usage in Home Assistant using their official APIs!
 
+TODO: Implement hourly readings for more granular usage data and more accuracy.
+
 ## 🎯 Features
 
 - ✅ **Official APIs** - Uses PWSD's actual smart meter and interval APIs
